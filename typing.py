@@ -17,14 +17,23 @@ def typing(text):
 	for line in lines:
 		print line
 		pos = 0
-		while pos < min(40, len(line)):
+		line_size = min(40, len(line))
+		while pos < line_size:
+			if line[pos] == '\t':
+				pos += 1
+				puts('\t')
+				continue
 			try:
 				ch = getch()
 			except KeyboardInterrupt:
 				puts("\n[Done] %d Error\n" % count, puts.purple)
 				exit()
-			if ch == '\n': break
-			if ch == line[pos]:
+			if ch in ('\n', '\r'):
+				pass # do nothing
+			elif ch == '\b' and pos > 0 and line[pos - 1] != '\t':
+				puts("\b \b") # backspace
+				pos -= 1
+			elif ch == line[pos]:
 				puts(ch, puts.green)
 				pos += 1
 			elif ch in string.printable:
@@ -36,7 +45,11 @@ def typing(text):
 
 
 def main():
-	script, filename = argv
+	try:
+		script, filename = argv
+	except ValueError:
+		print "Usage: python typing.py <textfile>"
+		exit(0)
 	print "filename is", filename
 	with open(filename, "rt") as f:
 		text = f.read()

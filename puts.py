@@ -24,7 +24,7 @@ class _Puts:
         self.white_b = "47"
 
 
-    def __call__(self, s, color):
+    def __call__(self, s, color = "0"):
         import sys
         sys.stdout.write(color and "\33[" + color + "m" + s + "\33[0m" or s)
 

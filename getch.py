@@ -27,10 +27,12 @@ class _GetchUnix:
             ch = sys.stdin.read(1)
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        if ch == chr(127):
+            return '\b'
         if ch in (chr(3), chr(4)):
             raise KeyboardInterrupt("You Pressed Ctrl+C")
-        return ch == '\r' and '\n' or ch
-
+        # return ch == '\r' and '\n' or ch
+        return ch
 
 class _GetchWindows:
     def __init__(self):
